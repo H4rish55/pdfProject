@@ -1,6 +1,9 @@
 import streamlit as st 
+#for text
 from pdfminer.high_level import extract_text
+#for tables
 import pdfplumber
+#for Images
 from pypdf import PdfReader
 import io
 from PIL import Image
