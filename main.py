@@ -2,7 +2,8 @@ import streamlit as st
 #for text
 from pdfminer.high_level import extract_text
 #for tables
-import pdfplumber
+import tabula
+import tempfile
 #for Images
 from pypdf import PdfReader
 import io
@@ -85,19 +86,6 @@ if uploaded_file and double_space_btn:
     horizontal_line(uploaded_file)
     double_spacing(uploaded_file)
 
-enter_index = st.text_input("Enter the index of the table you want to extract")
-
-def table_extraction(file):
-    with pdfplumber.open(file) as pdf:
-        for page in pdf.pages:
-            table = page.extract_tables()
-            st.markdown(f"There are total of {len(table)} tables.")
-            st.markdown(f"Table {int(enter_index)+ 1} has {len(table[int(enter_index)])} datas.")
-
-
-if uploaded_file and table_Btn:
-    table_extraction(uploaded_file)
-
 analyze_Image = st.button("Analyze Image")
 
 def Image_reader(file):
@@ -113,5 +101,17 @@ def Image_reader(file):
 if uploaded_file and analyze_Image:
     Image_reader(uploaded_file)
 
+def extract_tables(file):
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+        tmp.write(file.read())
+        tmp_path = tmp.name
 
+    tables = tabula.read_pdf(tmp_path, pages="all", multiple_tables=True)
+    st.write(f"Found {len(tables)} tables.")
+    for i, table in enumerate(tables, start=1):
+        st.write(f"Table {i}:")
+        st.dataframe(table)
 
+    
+if uploaded_file and table_Btn:
+    extract_tables(uploaded_file)

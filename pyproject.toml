@@ -5,10 +5,15 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "camelot>=12.6.29",
+    "llmwhisperer-client>=2.4.0",
+    "pandas>=2.3.0",
     "pdfminer>=20191125",
     "pdfminer-six>=20250506",
     "pdfplumber>=0.11.7",
     "pypdf>=5.7.0",
     "pytesseract>=0.3.13",
     "streamlit>=1.46.1",
+    "tabula>=1.0.5",
+    "tabula-py>=2.10.0",
 ]
